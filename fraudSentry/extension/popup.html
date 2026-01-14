@@ -1,9 +1,29 @@
 <!DOCTYPE html>
 <html>
-  <body style="width: 200px; padding: 10px;">
-    <h3>Fraud-Sentry</h3>
-    <button id="scanBtn">Scan Current Page</button>
-    <p id="status">Ready...</p>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { width: 280px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 15px; background: #ffffff; }
+        .header { display: flex; align-items: center; gap: 8px; margin-bottom: 15px; }
+        .meter { background: #eee; height: 14px; border-radius: 7px; overflow: hidden; margin: 10px 0; border: 1px solid #ddd; }
+        #meter-fill { width: 0%; height: 100%; transition: width 1s ease-in-out, background-color 0.5s; }
+        #score-text { font-size: 16px; font-weight: bold; margin: 5px 0; }
+        #details { font-size: 13px; color: #444; line-height: 1.5; }
+        .label { font-weight: bold; color: #2c3e50; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h3 style="margin:0;">🛡️ Fraud-Sentry</h3>
+    </div>
+    
+    <div class="meter"><div id="meter-fill"></div></div>
+    <p id="score-text">Trust Score: --</p>
+    
+    <hr style="border:0; border-top:1px solid #eee; margin: 15px 0;">
+    
+    <div id="details">Visit a website to start the AI analysis.</div>
+    
     <script src="popup.js"></script>
-  </body>
+</body>
 </html>
