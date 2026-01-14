@@ -1,0 +1,60 @@
+.scan {
+  background-color: #ffffff;
+  width: 360px;
+  height: 250px;
+  position: relative;
+
+  border-radius: 20px;     /* ✅ ROUND EDGES */
+  overflow: hidden;        /* ✅ CLIP CONTENT */
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35); /* illusion */
+}
+
+.scan .rectangle {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    129deg,
+    rgba(0, 43, 55, 1) 0%,
+    rgba(0, 104, 133, 1) 100%
+  );
+}
+
+.scan .text-wrapper {
+  position: absolute;
+  top: 40px;
+  left: 23px;
+  font-family: "Roboto-Black", Helvetica;
+  font-weight: 900;
+  color: #3edbd0;
+  font-size: 35px;
+  opacity: 0.9;
+}
+
+.scan .scan-button {
+  position: absolute;
+  top: 140px;
+  left: 23px;
+  width: 196px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.scan .scan-button-background {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  border-radius: 20px;
+}
+
+.scan .div {
+  position: relative;
+  text-align: center;
+  line-height: 40px;
+  font-family: "Roboto-Bold", Helvetica;
+  font-weight: 700;
+  font-size: 20px;
+  color: #002b37;
+  z-index: 1;
+}

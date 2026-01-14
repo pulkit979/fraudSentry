@@ -1,29 +1,22 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <style>
-        body { width: 280px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 15px; background: #ffffff; }
-        .header { display: flex; align-items: center; gap: 8px; margin-bottom: 15px; }
-        .meter { background: #eee; height: 14px; border-radius: 7px; overflow: hidden; margin: 10px 0; border: 1px solid #ddd; }
-        #meter-fill { width: 0%; height: 100%; transition: width 1s ease-in-out, background-color 0.5s; }
-        #score-text { font-size: 16px; font-weight: bold; margin: 5px 0; }
-        #details { font-size: 13px; color: #444; line-height: 1.5; }
-        .label { font-weight: bold; color: #2c3e50; }
-    </style>
-</head>
-<body>
-    <div class="header">
-        <h3 style="margin:0;">🛡️ Fraud-Sentry</h3>
-    </div>
-    
-    <div class="meter"><div id="meter-fill"></div></div>
-    <p id="score-text">Trust Score: --</p>
-    
-    <hr style="border:0; border-top:1px solid #eee; margin: 15px 0;">
-    
-    <div id="details">Visit a website to start the AI analysis.</div>
-    
-    <script src="popup.js"></script>
-</body>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <meta name="description" content="FraudSentry - Scan interface for fraud detection" />
+    <title>FraudSentry - Scan</title>
+    <link rel="stylesheet" href="globals.css" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="scan">
+      <div class="rectangle" aria-hidden="true"></div>
+      <h1 class="text-wrapper">FraudSentry</h1>
+
+      <button class="scan-button" type="button" aria-label="Start scan">
+        <span class="scan-button-background"></span>
+        <span class="div">Scan</span>
+      </button>
+    </main>
+  </body>
 </html>
