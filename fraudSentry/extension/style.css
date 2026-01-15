@@ -3,10 +3,10 @@
   width: 360px;
   height: 250px;
   position: relative;
-
-  border-radius: 20px;     /* ✅ ROUND EDGES */
-  overflow: hidden;        /* ✅ CLIP CONTENT */
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35); /* illusion */
+  /* CHANGED: Removed rounded corners */
+  border-radius: 0px; 
+  overflow: hidden;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
 .scan .rectangle {
@@ -39,13 +39,22 @@
   background: transparent;
   border: none;
   cursor: pointer;
+  /* ADDED: Smooth transition for the hover effect */
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+/* ADDED: Hover effect to highlight the button */
+.scan .scan-button:hover {
+  transform: scale(1.05); /* Slightly enlarges the button */
+  filter: brightness(1.2); /* Makes the button look "lit up" */
 }
 
 .scan .scan-button-background {
   position: absolute;
   inset: 0;
   background: #ffffff;
-  border-radius: 20px;
+  /* CHANGED: Removed rounded corners */
+  border-radius: 0px;
 }
 
 .scan .div {
