@@ -1,22 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<head>
     <meta charset="utf-8" />
-    <meta name="description" content="FraudSentry - Scan interface for fraud detection" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>FraudSentry - Scan</title>
-    <link rel="stylesheet" href="globals.css" />
     <link rel="stylesheet" href="style.css" />
-  </head>
-  <body>
+</head>
+<body>
     <main class="scan">
-      <div class="rectangle" aria-hidden="true"></div>
-      <h1 class="text-wrapper">FraudSentry</h1>
+        <div class="rectangle" aria-hidden="true"></div>
+        
+        <h1 class="text-wrapper">FraudSentry</h1>
 
-      <button class="scan-button" type="button" aria-label="Start scan">
-        <span class="scan-button-background"></span>
-        <span class="div">Scan</span>
-      </button>
+        <div id="result-display" class="result-container">
+            <div class="circular-progress" id="progress-circle">
+                <div class="inner-circle"></div>
+                <div class="percentage" id="score-text">0%</div>
+            </div>
+            <div class="status-box">
+                <span id="status-value">READY TO SCAN</span>
+            </div>
+            <p id="reason-text"></p>
+        </div>
+
+        <button id="scanBtn" class="scan-button" type="button">
+            <span class="scan-button-background"></span>
+            <span class="div">Scan</span>
+        </button>
     </main>
-  </body>
+    <script src="popup.js"></script>
+</body>
 </html>

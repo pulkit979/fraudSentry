@@ -1,69 +1,142 @@
+/* Reset and Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Roboto", Helvetica, sans-serif;
+    background-color: #f0f0f0;
+}
+
 .scan {
-  background-color: #ffffff;
-  width: 360px;
-  height: 250px;
-  position: relative;
-  /* CHANGED: Removed rounded corners */
-  border-radius: 0px; 
-  overflow: hidden;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    background-color: #ffffff;
+    width: 360px;
+    height: 420px; /* Adjusted for better spacing */
+    position: relative;
+    border-radius: 0; /* Forced Square Edges */
+    overflow: hidden;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
 }
 
+/* Background Rectangle with Gradient */
 .scan .rectangle {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    129deg,
-    rgba(0, 43, 55, 1) 0%,
-    rgba(0, 104, 133, 1) 100%
-  );
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        129deg,
+        rgba(0, 43, 55, 1) 0%,
+        rgba(0, 104, 133, 1) 100%
+    );
 }
 
+/* Header Text */
 .scan .text-wrapper {
-  position: absolute;
-  top: 40px;
-  left: 23px;
-  font-family: "Roboto-Black", Helvetica;
-  font-weight: 900;
-  color: #3edbd0;
-  font-size: 35px;
-  opacity: 0.9;
+    position: absolute;
+    top: 25px;
+    width: 100%;
+    text-align: center;
+    font-family: "Roboto-Black", Helvetica;
+    font-weight: 900;
+    color: #3edbd0;
+    font-size: 32px;
+    opacity: 0.9;
+    letter-spacing: 1px;
 }
 
+/* Centered Circular Graph Container */
+.result-container {
+    position: absolute;
+    top: 52%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    z-index: 2;
+}
+
+.circular-progress {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%; /* The graph itself remains a circle */
+    background: conic-gradient(#3edbd0 0deg, #1a3a42 0deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: background 0.4s ease-in-out;
+}
+
+.inner-circle {
+    position: absolute;
+    width: 125px;
+    height: 125px;
+    background: #002b37; /* Matches theme background */
+    border-radius: 50%;
+}
+
+.percentage {
+    position: relative;
+    font-size: 28px;
+    font-weight: 700;
+    color: #3edbd0;
+    z-index: 3;
+}
+
+.status-box {
+    margin-top: 15px;
+    font-weight: 700;
+    font-size: 16px;
+    color: #ffffff;
+    letter-spacing: 2px;
+}
+
+#reason-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 11px;
+    padding: 8px 30px;
+    text-align: center;
+    min-height: 40px;
+}
+
+/* Scan Button Styles */
 .scan .scan-button {
-  position: absolute;
-  top: 140px;
-  left: 23px;
-  width: 196px;
-  height: 40px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  /* ADDED: Smooth transition for the hover effect */
-  transition: transform 0.2s ease, filter 0.2s ease;
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 210px;
+    height: 45px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+    z-index: 10;
 }
 
-/* ADDED: Hover effect to highlight the button */
 .scan .scan-button:hover {
-  transform: scale(1.05); /* Slightly enlarges the button */
-  filter: brightness(1.2); /* Makes the button look "lit up" */
+    transform: translateX(-50%) scale(1.05);
+    filter: brightness(1.15);
 }
 
 .scan .scan-button-background {
-  position: absolute;
-  inset: 0;
-  background: #ffffff;
-  /* CHANGED: Removed rounded corners */
-  border-radius: 0px;
+    position: absolute;
+    inset: 0;
+    background: #ffffff;
+    border-radius: 0; /* Square Edges */
 }
 
 .scan .div {
-  position: relative;
-  text-align: center;
-  line-height: 40px;
-  font-family: "Roboto-Bold", Helvetica;
-  font-weight: 700;
-  font-size: 20px;
-  color: #002b37;
-  z-index: 1;
+    position: relative;
+    text-align: center;
+    line-height: 45px;
+    font-family: "Roboto-Bold", Helvetica;
+    font-weight: 700;
+    font-size: 18px;
+    color: #002b37;
+    z-index: 1;
+    text-transform: uppercase;
 }

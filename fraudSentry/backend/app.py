@@ -7,8 +7,8 @@ app = Flask(__name__)
 CORS(app)
 
 # FIXED: Corrected model name to gemini-1.5-flash
-genai.configure(api_key="YOUR_API_KEY") 
-model = genai.GenerativeModel('gemini-1.5-flash')
+genai.configure(api_key="AIzaSyAQw3u3nYDPQnySm0kaJRJqQljKrdlegUM") 
+model = genai.GenerativeModel('gemini-2.5-flash')
 
 # FIXED: Added Home Route to prevent 404
 @app.route('/')

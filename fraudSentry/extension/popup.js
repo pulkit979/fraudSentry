@@ -1,36 +1,75 @@
-// This runs as soon as you click the extension icon and the popup opens
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Check if there is data from a recent scan
+    const scanBtn = document.getElementById('scanBtn');
+    const resultDisplay = document.getElementById('result-display');
+    const progressCircle = document.getElementById('progress-circle');
+    const scoreText = document.getElementById('score-text');
+    const statusValue = document.getElementById('status-value');
+    const reasonText = document.getElementById('reason-text');
+
+    // Load last scan from storage
     chrome.storage.local.get('lastScan', (data) => {
         if (data.lastScan) {
-            const res = data.lastScan;
-            const fill = document.getElementById('meter-fill');
-            const scoreText = document.getElementById('score-text');
-            const details = document.getElementById('details');
-
-            // 2. Update the visual Trust Meter
-            fill.style.width = res.trust_score + "%";
-            
-            // Color logic: Red (0-39), Orange (40-69), Green (70-100)
-            if (res.trust_score < 40) {
-                fill.style.background = "#e74c3c"; // Dangerous Red
-            } else if (res.trust_score < 70) {
-                fill.style.background = "#f39c12"; // Suspicious Orange
-            } else {
-                fill.style.background = "#2ecc71"; // Safe Green
-            }
-            
-            // 3. Update the Text
-            scoreText.innerText = `Trust Score: ${res.trust_score}%`;
-            details.innerHTML = `
-                <div style="margin-top:10px; border-top:1px solid #ddd; padding-top:10px;">
-                    <strong>Status:</strong> <span style="color:${fill.style.background}">${res.status.toUpperCase()}</span><br>
-                    <p style="font-size:12px; color:#666;">${res.reason}</p>
-                    <p style="font-size:11px; font-weight:bold;">Recommendation: ${res.action}</p>
-                </div>
-            `;
-        } else {
-            document.getElementById('details').innerText = "Visit a website to see the AI scan results.";
+            updateUI(data.lastScan);
         }
     });
+
+    scanBtn.addEventListener('click', async () => {
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        
+        statusValue.innerText = "ANALYZING...";
+        resultDisplay.style.display = "flex";
+
+        // 1. Get Text from Content Script
+        chrome.scripting.executeScript({
+            target: { tabId: tab.id },
+            func: () => document.body.innerText.substring(0, 1500)
+        }, async (results) => {
+            const pageText = results[0].result;
+
+            // 2. Fetch from Localhost Backend
+            try {
+                const response = await fetch('http://localhost:5000/check', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url: tab.url, text: pageText })
+                });
+
+                const data = await response.json();
+                
+                // 3. Save and Update UI
+                chrome.storage.local.set({ lastScan: data });
+                updateUI(data);
+
+                // 4. Send signal back to page to show banner/highlights
+                chrome.tabs.sendMessage(tab.id, { action: "applyUI", data: data });
+
+            } catch (error) {
+                statusValue.innerText = "OFFLINE";
+                reasonText.innerText = "Make sure app.py is running.";
+            }
+        });
+    });
+
+    function updateUI(res) {
+        resultDisplay.style.display = "flex";
+        const score = res.trust_score || 0;
+        const status = res.status || "suspicious";
+
+        // Update Text
+        scoreText.innerText = `${score}%`;
+        statusValue.innerText = status.toUpperCase();
+        reasonText.innerText = res.reason;
+
+        // Color Logic
+        let color = "#2ecc71"; // Safe Green
+        if (status === "dangerous") color = "#e74c3c"; // Red
+        else if (status === "suspicious") color = "#f39c12"; // Orange
+
+        statusValue.style.color = color;
+        scoreText.style.color = color;
+
+        // Animate Circle (conic-gradient)
+        const degrees = score * 3.6;
+        progressCircle.style.background = `conic-gradient(${color} ${degrees}deg, #333 0deg)`;
+    }
 });
