@@ -10,11 +10,13 @@ app = Flask(__name__)
 CORS(app)
 
 # Configure Gemini AI
-API_KEY = os.getenv("GEMINI_KEY", "AIzaSyBKaVM2kxfsYFZvwky1Iv36wVQtLRyYMV8")
+API_KEY = os.getenv("GEMINI_KEY", "AIzaSyDBWhqSK49SH0OLPExfg2szvZwfuVsC7sM")
 
 client = genai.Client(api_key=API_KEY)
 MODEL_ID = "gemini-2.5-flash"
 # Initialize Database
+
+
 def init_db():
     conn = sqlite3.connect('stats.db')
     c = conn.cursor()
@@ -30,22 +32,27 @@ def init_db():
     conn.commit()
     conn.close()
 
+
 # Call this when app starts
 init_db()
 
 # Save scan results to database
+
+
 def save_to_db(url, status, score):
     conn = sqlite3.connect('stats.db')
     c = conn.cursor()
-    is_scam = 1 if status != "safe" else 0 
-    c.execute("INSERT INTO scans (url, is_scam, score) VALUES (?, ?, ?)", 
+    is_scam = 1 if status != "safe" else 0
+    c.execute("INSERT INTO scans (url, is_scam, score) VALUES (?, ?, ?)",
               (url, is_scam, score))
     conn.commit()
     conn.close()
 
+
 @app.route('/')
 def home():
     return "<h1>Fraud-Sentry Backend is Online!</h1><p><a href='/dashboard'>View Dashboard</a></p>"
+
 
 @app.route('/check', methods=['POST'])
 def check_url():
@@ -71,48 +78,53 @@ def check_url():
             model=MODEL_ID,
             contents=prompt
         )
-        clean_json = response.text.replace('```json', '').replace('```', '').strip()
-        
+        clean_json = response.text.replace(
+            '```json', '').replace('```', '').strip()
+
         # Parse and validate JSON
         result = json.loads(clean_json)
-        
+
         # Save to database
         save_to_db(url, result.get('status'), result.get('trust_score'))
-        
+
         print(f"\n[SCAN] {url}")
-        print(f"STATUS: {result.get('status')} | SCORE: {result.get('trust_score')}/100")
-        
+        print(
+            f"STATUS: {result.get('status')} | SCORE: {result.get('trust_score')}/100")
+
         return clean_json, 200, {'Content-Type': 'application/json'}
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"status": "error", "reason": "AI Analysis Failed"}), 500
 
+
 @app.route('/dashboard')
 def dashboard():
     conn = sqlite3.connect('stats.db')
     cursor = conn.cursor()
-    
+
     # Get total counts for summary cards
     cursor.execute("SELECT COUNT(*) FROM scans")
     total_scans = cursor.fetchone()[0]
-    
+
     cursor.execute("SELECT COUNT(*) FROM scans WHERE is_scam = 1")
     scams_found = cursor.fetchone()[0]
-    
+
     # Get data for the Chart (Safe vs Scam)
     cursor.execute("SELECT is_scam, COUNT(*) FROM scans GROUP BY is_scam")
     chart_data = cursor.fetchall()
-    
+
     # Get last 10 scans for the table
-    cursor.execute("SELECT url, is_scam, score, timestamp FROM scans ORDER BY timestamp DESC LIMIT 10")
+    cursor.execute(
+        "SELECT url, is_scam, score, timestamp FROM scans ORDER BY timestamp DESC LIMIT 10")
     recent_scans = cursor.fetchall()
-    
+
     conn.close()
-    
-    return render_template('dashboard.html', 
-                           total=total_scans, 
-                           scams=scams_found, 
+
+    return render_template('dashboard.html',
+                           total=total_scans,
+                           scams=scams_found,
                            recent=recent_scans)
+
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True, threaded=True)

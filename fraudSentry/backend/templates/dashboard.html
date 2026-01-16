@@ -20,47 +20,74 @@
         }
         .table { color: white; }
         .text-teal { color: #3edbd0; }
+        
+        .text-time { color: #adb5bd; } 
+
         .stat-number { 
-            font-size: 3rem; 
+            font-size: 2.2rem;
             font-weight: 900; 
             color: #3edbd0; 
         }
-        .text-truncate {
-            max-width: 300px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+        
+        .dashboard-logo {
+            max-width: 250px;
+            height: auto;
+            display: block;
+        }
+
+        .chart-container {
+            position: relative; 
+            height: 100px;
+            width: 100%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+        }
+        
+        .card-header-custom {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="container py-5">
-        <h1 class="mb-4 text-teal">🛡️ FraudSentry Threat Intelligence</h1>
+    <div class="container py-4">
         
-        <div class="row mb-5">
-            <div class="col-md-4">
-                <div class="card p-4 text-center">
-                    <h5>TOTAL SITES SCANNED</h5>
+        <div class="mb-4">
+            <img src="{{ url_for('static', filename='heading.png') }}" alt="FraudSentry" class="dashboard-logo">
+        </div>
+        
+        <div class="row mb-4 align-items-stretch">
+            
+            <div class="col-md-4 mb-3">
+                <div class="card p-3 text-center h-100 d-flex flex-column justify-content-center">
+                    <div class="card-header-custom">Total Sites Scanned</div>
                     <div class="stat-number">{{ total }}</div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card p-4 text-center border-danger">
-                    <h5 class="text-danger">SCAMS DETECTED</h5>
+
+            <div class="col-md-4 mb-3">
+                <div class="card p-3 text-center border-danger h-100 d-flex flex-column justify-content-center">
+                    <div class="card-header-custom text-danger">Scams Detected</div>
                     <div class="stat-number text-danger">{{ scams }}</div>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="card p-2">
-                    <canvas id="scamChart" style="max-height: 150px;"></canvas>
+
+            <div class="col-md-4 mb-3">
+                <div class="card p-2 h-100 d-flex flex-column justify-content-center align-items-center">
+                    <div class="chart-container">
+                        <canvas id="scamChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="card p-4">
-            <h4 class="text-teal mb-3">Live Threat Feed</h4>
+            <h5 class="text-teal mb-3">Live Threat Feed</h5>
             {% if recent %}
-            <table class="table table-dark table-hover">
+            <table class="table table-dark table-hover table-sm">
                 <thead>
                     <tr>
                         <th>URL</th>
@@ -72,7 +99,7 @@
                 <tbody>
                     {% for row in recent %}
                     <tr>
-                        <td class="text-truncate">{{ row[0] }}</td>
+                        <td class="text-truncate" style="max-width: 250px;">{{ row[0] }}</td>
                         <td>
                             {% if row[1] == 1 %}
                             <span class="badge bg-danger">DANGEROUS</span>
@@ -81,13 +108,13 @@
                             {% endif %}
                         </td>
                         <td>{{ row[2] }}%</td>
-                        <td class="small text-muted">{{ row[3] }}</td>
+                        <td class="small text-time">{{ row[3] }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
             {% else %}
-            <p class="text-center text-muted">No scans recorded yet. Start scanning URLs to see data!</p>
+            <p class="text-center text-muted">No scans recorded yet.</p>
             {% endif %}
         </div>
     </div>
@@ -105,9 +132,16 @@
                 }]
             },
             options: { 
+                responsive: true,
+                maintainAspectRatio: false,
                 plugins: { 
                     legend: { 
-                        labels: { color: 'white' } 
+                        position: 'right',
+                        labels: { 
+                            color: 'white',
+                            boxWidth: 10,
+                            font: { size: 10 }
+                        } 
                     } 
                 } 
             }
