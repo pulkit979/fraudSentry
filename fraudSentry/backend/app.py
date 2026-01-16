@@ -1,7 +1,8 @@
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS
-import google.generativeai as genai
+import google.genai as genai
 import json
+import os
 import sqlite3
 from datetime import datetime
 
@@ -9,9 +10,10 @@ app = Flask(__name__)
 CORS(app)
 
 # Configure Gemini AI
-genai.configure(api_key="AIzaSyBglQumZQ_ZuNz1GRRit4WagEXQKOSDGR8") 
-model = genai.GenerativeModel('gemini-2.5-flash')
+API_KEY = os.getenv("GEMINI_KEY", "AIzaSyBKaVM2kxfsYFZvwky1Iv36wVQtLRyYMV8")
 
+client = genai.Client(api_key=API_KEY)
+MODEL_ID = "gemini-2.5-flash"
 # Initialize Database
 def init_db():
     conn = sqlite3.connect('stats.db')
@@ -65,7 +67,10 @@ def check_url():
     }}
     """
     try:
-        response = model.generate_content(prompt)
+        response = client.models.generate_content(
+            model=MODEL_ID,
+            contents=prompt
+        )
         clean_json = response.text.replace('```json', '').replace('```', '').strip()
         
         # Parse and validate JSON

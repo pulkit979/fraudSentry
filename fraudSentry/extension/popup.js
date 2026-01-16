@@ -50,6 +50,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    scanBtn.addEventListener('click', async () => {
+    // 1. Start the animation & change text
+    scanBtn.classList.add('is-scanning');
+    const buttonText = scanBtn.querySelector('.div');
+    const originalText = buttonText.innerText;
+    buttonText.innerText = "SCANNING...";
+
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    
+    // 2. Send message to content.js (from your current code)
+    chrome.tabs.sendMessage(tab.id, { action: "manualScan" }, (response) => {
+        
+        // 3. Stop the animation
+        scanBtn.classList.remove('is-scanning');
+        buttonText.innerText = originalText;
+
+        if (chrome.runtime.lastError || !response) {
+            console.error("Scan failed");
+            return;
+        }
+
+        // 4. Update your Trust Meter UI with the result
+        updateUI(response);
+    });
+});
+
     function updateUI(res) {
         resultDisplay.style.display = "flex";
         const score = res.trust_score || 0;

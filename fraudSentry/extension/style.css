@@ -140,3 +140,20 @@ body {
     z-index: 1;
     text-transform: uppercase;
 }
+
+/* The Scanning Animation */
+@keyframes pulse-animation {
+  0% { transform: translateX(-50%) scale(1); opacity: 1; }
+  50% { transform: translateX(-50%) scale(1.05); opacity: 0.7; }
+  100% { transform: translateX(-50%) scale(1); opacity: 1; }
+}
+
+.is-scanning {
+  animation: pulse-animation 1.5s infinite ease-in-out;
+  pointer-events: none; /* Prevents multiple clicks while scanning */
+  filter: grayscale(0.5);
+}
+
+.is-scanning .div {
+  color: #7f8c8d !important; /* Change text color during scan */
+}
